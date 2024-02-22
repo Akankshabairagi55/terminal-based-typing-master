@@ -1,1 +1,2 @@
 # terminal-based-typing-master
+Become a typing virtuoso with Terminal Typing Master! 🎩💻 This command-line tool offers a no-frills, distraction-free environment to hone your typing skills. 🚀🔤 With various difficulty levels and customizable exercises, sharpen your accuracy and speed with every keystroke. 💨⌨️ Track your progress, compete with friends, and master the art of typing efficiently—all from the comfort of your terminal. 💪🏼📈 Whether you're a beginner or aiming for mastery, Terminal Typing Master is your ultimate companion. 🌟👨🏽‍💻
