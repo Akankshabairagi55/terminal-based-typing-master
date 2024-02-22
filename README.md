@@ -35,8 +35,14 @@ To install Terminal Typing Master, follow these steps:
     
     ```
         pip install time
+    ```    
+    ```   
         pip install random
+    ```    
+    ```
         pip install termcolor
+    ```   
+    ```
         pip install json
     ```   
 
