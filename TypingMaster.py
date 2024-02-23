@@ -34,27 +34,31 @@ def ShowLeaderBoard():
 
 def main():
     # UpdateLeaderBoard
-    print(colored("\nWelcome to Terminal Typing Master!⌨️","black","on_white"))
-    username = input("\nEnter your username : ")
+    print()
+    print(colored("Welcome to Terminal Typing Master!⌨️","red","on_white"))
+    print()
+    username = input("\nEnter your username :- ")
 
     while True:
-        print("\nOptions:")
+        print("\nOptions:\n")
         print("1. Start Typing Test ⌨️")
         print("2. Show Leaderboard")
         print("3. Exit ❌")
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice :- ")
 
         if choice == "1":
-            category = input("Choose a category (e.g., animals, fruits): ")
+            category = input("\nChoose a category (e.g., animals, fruits): ")
+            print()
             words = load_words_from_category(category)
             start_time = time.time()
             words_typed = 0
 
             for word in words:
                 print(word)
-                user_input = input("Type the word (Ctrl + Q to quit ❌): ")
+                user_input = input("\nType the word (Ctrl + Q to quit ❌): ")
+                print()
                 if user_input.lower() == "ctrl+q":
-                    print("Exiting Typing Test...")
+                    print("Exiting❌ Typing Test...")
                     break
                 words_typed += 1
 
@@ -68,19 +72,30 @@ def main():
         elif choice=="2":
             # UpdateLeaderBoard(username,wpm)
             my_leaderboard = ShowLeaderBoard()
+
+            print()
+            print(colored("LeaderBoard :- ","green"))
+            print()
+
             # print(my_leaderboard)
             rank = 1
             for j in my_leaderboard:
                 
-                print(str(rank)+".    "+j+"     - "+str(my_leaderboard[j]))
+                print(f"{rank}.  {j} ->  {my_leaderboard[j]:.2f} WPM")
                 rank+=1
             
         elif choice == "3":
-            print("Exiting Terminal Typing Master⌨️...")
+            print()
+            print(colored("Exiting❌ Terminal Typing Master⌨️...","black","on_white"))
+            print()
             break
 
         else:
-            print("Invalid❎choice!! Please choose again.")
+            print()
+            print(colored("Invalid choice!!❎","black","on_light_red"))
+            print()
+            print("Please choose again.")
+            print()
 
 def load_words_from_category(category):
     if category == "animals":
