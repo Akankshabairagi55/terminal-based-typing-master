@@ -1,84 +1,131 @@
-import random # Importing the random module to choose random words
-import time # Importing the time module to calculate real-time duration
-import json # Importing the json module to work with JSON objects
-
+# Importing the necessary modules for the script:
+# import random  # FOR CHOOSING RANDOM WORDS
+import time  # TO CALCULATE REAL TIME
+import json  # TO USE JSON OBJECTS
+# Importing modules for terminal color output:
 import os
-os.system("color") # Setting color settings for the terminal
-from termcolor import colored # Importing colored function to add color to terminal text
-
-def UpdateLeaderBoard(username,wpm):
-    try: # Try block to prevent errors
-        with open("LeaderBoard.json","r") as f: # Opening a file to read JSON data
-            leaderboard = json.load(f) # Loading JSON data into a Python dictionary
-    except FileNotFoundError: # Handling the error if the file doesn't exist
-        leaderboard = {} # If file doesn't exist, initialize an empty dictionary
-    
-    leaderboard[username] = wpm # Update the dictionary with the username and WPM
-    
-    # Sort the leaderboard based on WPM in descending order
+os.system("color")
+from termcolor import colored  # TO GIVE TERMINAL COLOR
+# Definition of the function to update the leaderboard:
+def UpdateLeaderBoard(username, wpm):
+    """
+    Update the leaderboard with the username and WPM score.
+    """
+    # Attempting to open and read the contents of the leaderboard file:
+    try:
+        with open("LeaderBoard.json", "r") as f:  # Open any file within the main file
+            leaderboard = json.load(f)  # Convert JSON object to Python dictionary
+    # Handling the case where the leaderboard file is not found:
+    except FileNotFoundError:
+        leaderboard = {}  # To handle the Error of an empty file
+    # Updating the leaderboard with the new user's data:
+    leaderboard[username] = wpm  # Update the data of the user
+    # Sorting the leaderboard by WPM score in descending order:
     leaderboard = dict(sorted(leaderboard.items(), key=lambda item: item[1], reverse=True))
-    
-    # Writing the updated leaderboard dictionary back to the JSON file
-    with open("LeaderBoard.json", "w") as g: # Opening the file to write JSON data
-        json.dump(leaderboard, g) # Dumping the dictionary data back to the file
-
+    # Writing the updated leaderboard back to the JSON file:
+    with open("LeaderBoard.json", "w") as g:  # "R" ==> READ , "W" ==> WRITE
+        json.dump(leaderboard, g)  # DUMP ==> DICT TO JSON OBJECT
+# Function to display the leaderboard:
 def ShowLeaderBoard():
-    with open("LeaderBoard.json", "r") as file: # Opening the JSON file to read data
-        leaderboard = json.load(file) # Loading JSON data into a Python dictionary
-    return leaderboard # Return the leaderboard dictionary
-
+    """
+    Load and return the leaderboard.
+    """
+    # Opening the leaderboard file and loading its contents:
+    with open("LeaderBoard.json", "r") as file:
+        leaderboard = json.load(file)
+    return leaderboard  # leaderboard is a dictionary
+# Main function to orchestrate the program's flow:
 def main():
-    print()
-    print(colored("Welcome to Terminal Typing Master!⌨️", "red", "on_white")) # Displaying welcome message
-    print()
-    username = input("\nEnter your username :- ") # Taking user input for username
-
-    while True: # Start of the main game loop
-        print("\nOptions:\n") # Displaying available options to the user
-        print("1. Start Typing Test ⌨️")
+    """
+    Main function to run the typing test game.
+    """
+    # Printing a welcome message:
+    print(colored("\nWelcome to Terminal Typing Master!:keyboard:", "red", "on_white"))
+    # Asking for the user's username:
+    username = input("\nEnter your username :- ")
+    while True:
+        # Displaying the menu options:
+        print("\nOptions:\n")
+        print("1. Start Typing Test :keyboard:")
         print("2. Show Leaderboard")
-        print("3. Exit ❌")
-        choice = input("\nEnter your choice :- ") # Taking user input for their choice
-        
-        if choice == "1": # If the user chooses to start the typing test
-            category = input("\nChoose a category (e.g., animals, fruits): ") # Taking user input for category
+        print("3. Exit :x:")
+        # Asking for the user's choice:
+        choice = input("\nEnter your choice :- ")
+        if choice == "1":
+            # Asking the user to choose a category:
+            category = input("\nChoose a category (e.g., animals, fruits): ")
             print()
-            words = load_words_from_category(category) # Loading words based on chosen category
-            start_time = time.time() # Start time of the typing test
-            words_typed = 0 # Initialize variable to count the number of words typed
-            correct_words = 0 # Initialize variable to count the number of correct words typed
-            for word in words: # Loop through each word in the list of words
-                print(word) # Display the word to be typed
-                user_input = input("\nType the word (Ctrl + Q to quit ❌): ") # Prompt the user to type the word
+            # Loading words based on the chosen category:
+            words = load_words_from_category(category)  # An array containing some words
+            start_time = time.time()  # Storing the current time
+            # Variables to track typing performance:
+            words_typed = 0
+            accurate_word = 0
+            # Looping through each word:
+            for word in words:
+                print(word)
+                # Asking the user to type the word:
+                user_input = input("\nType the word (Ctrl + Q to quit :x:): ")
                 print()
-                if user_input.lower() == "ctrl+q": # If user wants to quit
-                    print("Exiting❌ Typing Test...") # Display exit message
-                    break # Break out of the loop
-                
-                if user_input == word: # If the typed word matches the word to be typed
-                    correct_words += 1 # Increment the count of correct words
-                words_typed += 1 # Increment the count of total words typed
-            print("CORRECT WORDS:", correct_words) # Display the number of correct words typed
-
-            end_time = time.time() # End time of the typing test
-            time_taken = end_time - start_time # Calculate the duration of the typing test
-            wpm = calculate_wpm(words_typed, time_taken, correct_words) # Calculate WPM
-            print(f"\nWords Per Minute (WPM): {wpm:.2f}") # Display the calculated WPM
-            
-            UpdateLeaderBoard(username, wpm) # Update the leaderboard with the username and WPM
-        
-        elif choice == "2": # If the user chooses to show the leaderboard
-            my_leaderboard = ShowLeaderBoard() # Get the leaderboard data
+                if user_input.lower() == "ctrl+q":
+                    print("Exiting:x: Typing Test...")
+                    break
+                # Checking if the typed word matches the actual word:
+                if user_input == word:
+                    accurate_word += 1
+                words_typed += 1
+            print("\nAccurate Words -->> ",accurate_word)
+            # Calculating performance metrics:
+            end_time = time.time()  # Storing the current time
+            time_taken = end_time - start_time  # Calculating the time taken
+            wpm = calculate_wpm(words_typed, time_taken, accurate_word)  # Calculating WPM
+            # Displaying the WPM score:
+            print(f"\nWords Per Minute :- {wpm:.2f} WPM")  # 'f' string
             print()
-            print(colored("Leaderboard :- ", "green")) # Display leaderboard heading
+            # Updating the leaderboard with the user's performance:
+            UpdateLeaderBoard(username, wpm)
+        elif choice == "2":
+            # Displaying the leaderboard:
+            my_leaderboard = ShowLeaderBoard()  # A dictionary containing real-time data
+            print(colored("\nLeaderboard :- \n", "green"))
+            # Displaying each user's performance:
+            rank = 1
+            for user, wpm in my_leaderboard.items():
+                print(f"{rank}.  {user}    ->  {wpm:.2f} WPM")
+                rank += 1
             print()
-            rank = 1 # Initialize rank counter
-            for j in my_leaderboard: # Loop through each entry in the leaderboard
-                print(f"{rank}.  {j} ->  {my_leaderboard[j]:.2f} WPM") # Display username and WPM
-                rank += 1 # Increment rank counter
-        
-        elif choice == "3": # If the user chooses to exit the game
-            print()
-            print(colored("Exiting❌ Terminal Typing Master⌨️...", "black", "on_white")) # Display exit message
-            print()
-            break 
+            # rank=1
+            # for j in my_leaderboard:
+                # print(f"{rank}.  {j} ->  {my_leaderboard[j]:.2f} WPM")
+                # print(str(rank)+".    "+ j +"     - "+str(my_leaderboard[j])+" WPM")
+                # rank += 1
+        elif choice == "3":
+            # Exiting the program:
+            print(colored("\nExiting:x: Terminal Typing Master:keyboard:...\n", "black", "on_white"))
+            break
+        else:
+            # Handling invalid choices:
+            print(colored("\nInvalid choice!!:negative_squared_tick:\n", "white", "on_light_red"))
+            print("Please choose again!!")
+# Function to load words from a specific category:
+def load_words_from_category(category):
+    """
+    Load and return words based on the chosen category.
+    """
+    if category == "animals":
+        return ["cat", "dog", "elephant", "lion", "tiger"]
+    elif category == "fruits":
+        return ["apple", "banana", "orange", "grape", "watermelon"]
+    else:
+        print("Invalid category!! Using default category -> 'animals'\n")
+        return ["cat", "dog", "elephant", "lion", "tiger"]
+# Function to calculate WPM (Words Per Minute):
+def calculate_wpm(words_typed, time_taken, accurate_word):
+    """
+    Calculate and return the WPM score.
+    """
+    wpm = (accurate_word / 5) / (time_taken / 60)  # Assuming 5 words per sentence
+    return wpm
+# Running the main function if the script is executed directly:
+if __name__ == "__main__":
+    main()
